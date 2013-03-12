@@ -1,0 +1,13 @@
+Scripts for monitorint EMC VNX Storage systems.
+
+To be placed in the control station, and called using check_by_ssh from nagios.
+
+Notes:
+  * It's advisable to create a different user (nagios for instance) for monitoring, and create ssh keys for password-less login
+  * You must use the -E switch ton check_by_ssh to skip the banner text from output
+  
+This scripts are barely tested. Feel free to improve them
+
+
+Toni Comerma
+March 2013
