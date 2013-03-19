@@ -150,6 +150,7 @@ if [ $CRITICAL -eq 0 ]
 	fi	
  done
 fi
+rm -f $TMP
 if [ $CRITICAL -eq 1 ]
 then
   echo "CRITICAL: $TEXT"
