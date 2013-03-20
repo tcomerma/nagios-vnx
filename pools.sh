@@ -4,7 +4,7 @@
 # REQUIRES: 
 # AUTHOR: Toni Comerma
 # DATE: mar-2013
-# $Id:$
+# $Id$
 #
 # Note: If pool name has spaces, you have to quote it
 
@@ -73,7 +73,29 @@ done
 p=${p//,/ }
 p=`echo $p | sed -e 's/^ *//g' -e 's/ *$//g'`
 
+# Checking Control Station Status (primary/standby)
+MCDHOME=/nasmcd
+RC_CS_IS_STANDBY=11
+RC_CS_IS_PRIMARY=10
 
+slot=`$MCDHOME/sbin/t2slot`
+peer=$(( $slot == 0 ? 1 : 0 ))
+ret=`$MCDHOME/sbin/getreason | grep -w slot_$slot`
+rc=`echo $ret | cut -d- -f1`
+status=`echo $ret | cut -d- -f2`
+
+if [ $rc -eq $RC_CS_IS_STANDBY ]
+ then
+    echo "OK: Standby Control Station - Not Monitoring"
+    exit $STATE_OK 
+ else
+   if [ $rc -ne $RC_CS_IS_PRIMARY ]
+   then
+      echo "CRITICAL: Unknown Control Station Status (not primary, not standby) take a look"
+      exit $STATE_CRITICAL
+   fi
+ fi
+ 
 # try SP A
  /nas/sbin/navicli -h vnx01-spa storagepool -list | awk -F ":" '/Pool Name/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);p=$2 }
                                                               /^Pool ID/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);id=$2 }

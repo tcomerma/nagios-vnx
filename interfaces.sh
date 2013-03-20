@@ -4,7 +4,7 @@
 # REQUIRES: 
 # AUTHOR: Toni Comerma
 # DATE: jan-2013
-# $Id:$
+# $Id$
 #
 # Notes
 #  - Virtual Interfaces can only be checked against active datamover (server_2)
@@ -70,6 +70,30 @@ PHYSICAL=`echo $PHYSICAL | sed -e 's/^ *//g' -e 's/ *$//g'`
 
 VIRTUAL=${VIRTUAL//,/ }
 VIRTUAL=`echo $VIRTUAL | sed -e 's/^ *//g' -e 's/ *$//g'`
+
+# Checking Control Station Status (primary/standby)
+MCDHOME=/nasmcd
+RC_CS_IS_STANDBY=11
+RC_CS_IS_PRIMARY=10
+
+slot=`$MCDHOME/sbin/t2slot`
+peer=$(( $slot == 0 ? 1 : 0 ))
+ret=`$MCDHOME/sbin/getreason | grep -w slot_$slot`
+rc=`echo $ret | cut -d- -f1`
+status=`echo $ret | cut -d- -f2`
+
+if [ $rc -eq $RC_CS_IS_STANDBY ]
+ then
+    echo "OK: Standby Control Station - Not Monitoring"
+    exit $STATE_OK 
+ else
+   if [ $rc -ne $RC_CS_IS_PRIMARY ]
+   then
+      echo "CRITICAL: Unknown Control Station Status (not primary, not standby) take a look"
+      exit $STATE_CRITICAL
+   fi
+ fi
+ 
 if [ $SERVER = "ALL" ]
 then 
   SERVER="server_3 server_2"
