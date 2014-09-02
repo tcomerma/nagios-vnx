@@ -4,9 +4,10 @@
 # REQUIRES: 
 # AUTHOR: Toni Comerma
 # DATE: mar-2013
-# $Id$
+# $Id:$
 #
 # Notes
+# 2/9/2014:  Modificat per suportar "Empty" slots
 
 
 PROGNAME=`readlink -f $0`
@@ -87,7 +88,7 @@ fi
 
 
 # Check 2
-HW=`/nas/sbin/nas_inventory -info -all | awk -F '=' '/Component Name/ { c=$2 }
+HW=`/nas/bin/nas_inventory -info -all | grep -v "Empty" | awk -F '=' '/Component Name/ { c=$2 }
                                 /Status/         { s=$2 ; if (s != " OK") {print c":"s}}' `
 if [ ! -z "$HW" ]
  then
