@@ -7,6 +7,7 @@
 # $Id$
 #
 # Notes:
+#  1/9/2014: Changes to make more portable
 
 
 PROGNAME=`readlink -f $0`
@@ -89,14 +90,14 @@ if [ $rc -eq $RC_CS_IS_STANDBY ]
 
  # Check FC ports
  # try SP A
- /nas/sbin/navicli -h vnx01-spa getall -hba | awk -F ":" '/SP Name/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);sp=$2 }
+ /nas/sbin/navicli -h spa getall -hba | awk -F ":" '/SP Name/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);sp=$2 }
                                                               /Link Status/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);l=$2 }
                                                               /SP Port ID/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);id=$2 }															  
 															  /Port Status/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);p=$2; {print sp",ID="id": Link="l",Port="p} }' > $TMP 2> /dev/null
  if [ $? -ne 0 ]
  then
     #try SP b
-    /nas/sbin/navicli -h vnx01-spa getall -hba | awk -F ":" '/SP Name/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);sp=$2 }
+    /nas/sbin/navicli -h spb getall -hba | awk -F ":" '/SP Name/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);sp=$2 }
                                                               /Link Status/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);l=$2 }
                                                               /SP Port ID/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);id=$2 }															  
 															  /Port Status/ { gsub(/^[ \t]+|[ \t]+$/, "", $2);p=$2; {print sp",ID="id": Link="l",Port="p} }' > $TMP 2> /dev/null

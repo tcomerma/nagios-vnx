@@ -4,7 +4,7 @@
 # REQUIRES: 
 # AUTHOR: Toni Comerma
 # DATE: mar-2013
-# $Id$
+# $Id:$
 #
 # Note: If pool name has spaces, you have to quote it
 

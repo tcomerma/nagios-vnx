@@ -4,7 +4,7 @@
 # REQUIRES: 
 # AUTHOR: Toni Comerma
 # DATE: jan-2013
-# $Id$
+# $Id:$
 #
 # Notes
 #  - Virtual Interfaces can only be checked against active datamover (server_2)
